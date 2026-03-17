@@ -1,0 +1,61 @@
+{% extends 'main/base.html' %}
+
+{% block title %}הופעות — אריה פולק{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+  {% include 'main/_topbar.html' %}
+
+  <div class="page-hero">
+    <div class="page-eyebrow">PERFORMANCES</div>
+    <h1 class="page-title">הופעות</h1>
+  </div>
+
+  <div class="page-content">
+
+    {% if upcoming %}
+      <div class="section-label">הופעות קרובות</div>
+      <div class="performance-list">
+        {% for perf in upcoming %}
+          <div class="perf-item">
+            <div class="perf-date">{{ perf.date|date:"d.m.Y" }}</div>
+            <div>
+              <div class="perf-title">{{ perf.title }}</div>
+              <div class="perf-venue">{{ perf.venue }}</div>
+              {% if perf.description %}
+                <div class="perf-desc">{{ perf.description }}</div>
+              {% endif %}
+            </div>
+            {% if perf.ticket_url %}
+              <a href="{{ perf.ticket_url }}" class="btn-ticket" target="_blank" rel="noopener">כרטיסים</a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state" style="margin-bottom: 48px;">
+        <span>🎵</span>
+        אין הופעות קרובות כרגע — עקבו אחרינו לעדכונים
+      </div>
+    {% endif %}
+
+    {% if past %}
+      <div class="section-label">הופעות עבר</div>
+      <div class="performance-list">
+        {% for perf in past %}
+          <div class="perf-item" style="opacity: 0.55;">
+            <div class="perf-date">{{ perf.date|date:"d.m.Y" }}</div>
+            <div>
+              <div class="perf-title">{{ perf.title }}</div>
+              <div class="perf-venue">{{ perf.venue }}</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+
+  <footer class="site-footer">© 2025 אריה פולק. כל הזכויות שמורות.</footer>
+</div>
+{% endblock %}

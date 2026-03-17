@@ -1,0 +1,63 @@
+{% extends 'main/base.html' %}
+
+{% block title %}יצירת קשר — אריה פולק{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+  {% include 'main/_topbar.html' %}
+
+  <div class="page-hero">
+    <div class="page-eyebrow">CONTACT</div>
+    <h1 class="page-title">יצירת קשר</h1>
+  </div>
+
+  <div class="page-content">
+    <div class="contact-grid">
+
+      <div class="contact-info">
+        <p>
+          לשאלות, הזמנות הופעות, שיתופי פעולה או סתם להגיד שלום —
+          אשמח לשמוע ממכם.
+        </p>
+        <div class="contact-detail">
+          <div class="contact-detail-item">
+            <span class="contact-detail-label">אימייל</span>
+            <span class="contact-detail-value">arie@example.com</span>
+          </div>
+          <div class="contact-detail-item">
+            <span class="contact-detail-label">טלפון</span>
+            <span class="contact-detail-value" dir="ltr">050-000-0000</span>
+          </div>
+        </div>
+      </div>
+
+      <form class="contact-form" method="post" novalidate>
+        {% csrf_token %}
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert-success">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="form-group">
+          <label for="name">שם</label>
+          <input type="text" id="name" name="name" required placeholder="השם שלך" />
+        </div>
+        <div class="form-group">
+          <label for="email">אימייל</label>
+          <input type="email" id="email" name="email" required placeholder="your@email.com" dir="ltr" />
+        </div>
+        <div class="form-group">
+          <label for="message">הודעה</label>
+          <textarea id="message" name="message" required placeholder="כתוב כאן..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">שליחה</button>
+      </form>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">© 2025 אריה פולק. כל הזכויות שמורות.</footer>
+</div>
+{% endblock %}

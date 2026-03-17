@@ -1,0 +1,55 @@
+{% extends 'main/base.html' %}
+
+{% block title %}אודות — אריה פולק{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+  {% include 'main/_topbar.html' %}
+
+  <div class="page-hero">
+    <div class="page-eyebrow">ABOUT</div>
+    <h1 class="page-title">אודות</h1>
+  </div>
+
+  <div class="page-content">
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          <strong>אריה פולק</strong> הוא קומפוזיטור ומוזיקאי ישראלי הידוע ביצירות
+          אינסטרומנטליות המשלבות בין מוזיקה קלאסית, ג'אז ועולם.
+        </p>
+        <p>
+          עם ניסיון של מעל עשרים שנה בזירה המוזיקלית, אריה עיצב את קולו הייחודי
+          דרך הופעות בארץ ובחו"ל, שיתופי פעולה עם מוזיקאים מהשורה הראשונה,
+          ואלבומים שזכו לשבחי המבקרים.
+        </p>
+        <p>
+          המוזיקה שלו נוגעת בנשמה — <strong>סיפורים ללא מילים</strong>, מסע רגשי
+          שמזמין את המאזין לעצור, להרגיש ולגלות עולמות חדשים.
+        </p>
+      </div>
+
+      <div class="about-stats">
+        <div class="stat-item">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">שנות פעילות</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">8</div>
+          <div class="stat-label">אלבומים</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">200+</div>
+          <div class="stat-label">הופעות</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">15</div>
+          <div class="stat-label">מדינות</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">© 2025 אריה פולק. כל הזכויות שמורות.</footer>
+</div>
+{% endblock %}

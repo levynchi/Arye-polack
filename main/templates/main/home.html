@@ -1,0 +1,333 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}אריה פולק — מוזיקאי{% endblock %}
+
+{% block body %}
+<div class="spa-root">
+
+  <!-- ═══ FIXED CIRCLE ═══ -->
+  <div class="hero-wrapper">
+    <div class="hero-circle">
+      <!--
+        סדר: בית → יצירת קשר → הופעות → אודות → מוזיקה → בית (לולאה)
+        [0] clone-MUSIC   ← כדי שמגלגלים למעלה מבית מגיעים למוזיקה
+        [1] HOME
+        [2] CONTACT
+        [3] PERFORMANCES
+        [4] ABOUT
+        [5] MUSIC
+        [6] clone-HOME    ← כדי שמגלגלים למטה ממוזיקה חוזרים לבית
+      -->
+      <div class="circle-track" id="circleTrack">
+
+        <!-- [0] clone-MUSIC -->
+        <div class="circle-panel">
+          <div class="hero-musician-label">MUSIC</div>
+          <h2 class="panel-title">מוזיקה</h2>
+          <div class="hero-divider"></div>
+          <div class="panel-tracks">
+            {% if tracks %}
+              {% for track in tracks|slice:":5" %}
+                <div class="panel-track-item">
+                  <span class="panel-track-num">{{ forloop.counter }}</span>
+                  <div style="flex:1;text-align:right">
+                    <div class="panel-track-name">{{ track.title }}</div>
+                    <div class="panel-track-year">{{ track.year }}</div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="panel-empty">יצירות יתווספו בקרוב</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- [1] HOME -->
+        <div class="circle-panel">
+          <div class="hero-musician-label">ART</div>
+          <h1 class="hero-name">אריה פולק</h1>
+          <p class="hero-subtitle">קומפוזיטור | מוזיקאי | תזונאי</p>
+          <div class="hero-divider"></div>
+          <p class="hero-desc">מוזיקה שנוגעת ללב, מרגשת את הנשמה ומספרת סיפורים ללא תירוצים.</p>
+          <button class="hero-cta" data-goto="4">האזן</button>
+          <div class="hero-divider"></div>
+          <span class="hero-scroll">גלול ↓</span>
+        </div>
+
+        <!-- [2] CONTACT -->
+        <div class="circle-panel">
+          <div class="hero-musician-label">CONTACT</div>
+          <h2 class="panel-title">יצירת קשר</h2>
+          <div class="hero-divider"></div>
+          <form class="panel-form" id="contactForm">
+            {% csrf_token %}
+            <input type="text"  name="name"    placeholder="שם"     required />
+            <input type="email" name="email"   placeholder="אימייל" required dir="ltr" />
+            <textarea           name="message" placeholder="הודעה"  required rows="3"></textarea>
+            <button type="submit" class="hero-cta" style="margin-top:8px">שלח</button>
+          </form>
+        </div>
+
+        <!-- [3] PERFORMANCES -->
+        <div class="circle-panel">
+          <div class="hero-musician-label">PERFORMANCES</div>
+          <h2 class="panel-title">הופעות</h2>
+          <div class="hero-divider"></div>
+          <div class="panel-perfs">
+            {% if upcoming %}
+              {% for perf in upcoming|slice:":4" %}
+                <div class="panel-perf-item">
+                  <span class="panel-perf-date">{{ perf.date|date:"d.m.y" }}</span>
+                  <div>
+                    <div class="panel-perf-name">{{ perf.title }}</div>
+                    <div class="panel-perf-venue">{{ perf.venue }}</div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="panel-empty">אין הופעות קרובות כרגע</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- [4] ABOUT -->
+        <div class="circle-panel">
+          <div class="hero-musician-label">ABOUT</div>
+          <h2 class="panel-title">אודות</h2>
+          <div class="hero-divider"></div>
+          <p class="panel-bio">
+            קומפוזיטור ומוזיקאי ישראלי עם מעל עשרים שנה בזירה המוזיקלית.
+            יצירות אינסטרומנטליות המשלבות קלאסי, ג'אז ועולם.
+          </p>
+          <div class="panel-stats-row">
+            <div class="panel-stat"><span class="panel-stat-num">20+</span><span class="panel-stat-lbl">שנות פעילות</span></div>
+            <div class="panel-stat"><span class="panel-stat-num">8</span><span class="panel-stat-lbl">אלבומים</span></div>
+            <div class="panel-stat"><span class="panel-stat-num">200+</span><span class="panel-stat-lbl">הופעות</span></div>
+          </div>
+        </div>
+
+        <!-- [5] MUSIC -->
+        <div class="circle-panel">
+          <div class="hero-musician-label">MUSIC</div>
+          <h2 class="panel-title">מוזיקה</h2>
+          <div class="hero-divider"></div>
+          <div class="panel-tracks">
+            {% if tracks %}
+              {% for track in tracks|slice:":5" %}
+                <div class="panel-track-item">
+                  <span class="panel-track-num">{{ forloop.counter }}</span>
+                  <div style="flex:1;text-align:right">
+                    <div class="panel-track-name">{{ track.title }}</div>
+                    <div class="panel-track-year">{{ track.year }}</div>
+                  </div>
+                  {% if track.audio_file %}
+                    <button class="play-btn" data-src="{{ track.audio_file.url }}" aria-label="נגן">
+                      <span class="play-icon">▶</span>
+                    </button>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="panel-empty">יצירות יתווספו בקרוב</p>
+            {% endif %}
+          </div>
+          <!-- progress bar -->
+          <div class="audio-bar" id="audioBar" style="display:none">
+            <span class="audio-title" id="audioTitle"></span>
+            <div class="audio-progress-wrap" id="audioProgressWrap">
+              <div class="audio-progress" id="audioProgress"></div>
+            </div>
+            <span class="audio-time" id="audioTime">0:00</span>
+          </div>
+        </div>
+
+        <!-- [6] clone-HOME -->
+        <div class="circle-panel">
+          <div class="hero-musician-label">ART</div>
+          <h1 class="hero-name">אריה פולק</h1>
+          <p class="hero-subtitle">קומפוזיטור | מוזיקאי | תזונאי</p>
+          <div class="hero-divider"></div>
+          <p class="hero-desc">מוזיקה שנוגעת ללב, מרגשת את הנשמה ומספרת סיפורים ללא תירוצים.</p>
+          <span class="hero-scroll">↑ גלול למעלה</span>
+        </div>
+
+      </div><!-- end circle-track -->
+    </div><!-- end hero-circle -->
+
+    <nav class="hero-nav" aria-label="ניווט ראשי">
+      <a href="#" class="nav-pill nav-top"   data-nav="0">בית</a>
+      <a href="#" class="nav-pill nav-left"  data-nav="4">יצירת קשר</a>
+      <a href="#" class="nav-pill nav-right" data-nav="1">מוזיקה</a>
+      <a href="#" class="nav-pill nav-bot-l" data-nav="2">הופעות</a>
+      <a href="#" class="nav-pill nav-bot-r" data-nav="3">אודות</a>
+    </nav>
+  </div><!-- end hero-wrapper -->
+
+  <!-- 7 scroll pages (one per track panel) -->
+  <div class="scroll-page"></div>
+  <div class="scroll-page"></div>
+  <div class="scroll-page"></div>
+  <div class="scroll-page"></div>
+  <div class="scroll-page"></div>
+  <div class="scroll-page"></div>
+  <div class="scroll-page"></div>
+
+</div>
+
+<script>
+(function () {
+  const track   = document.getElementById('circleTrack');
+  const circle  = document.querySelector('.hero-circle');
+  const panels  = track.querySelectorAll('.circle-panel');
+  const navBtns = document.querySelectorAll('.hero-nav a[data-nav]');
+
+  // real panel index (0-4) → track index (1-5), nav data-nav (0-4)
+  // track: [clone-contact, home, music, about, perf, contact, clone-home]
+  //         0              1     2      3      4     5        6
+
+  let panelH  = circle.offsetHeight;
+  let rendered = 1; // start at HOME (track index 1)
+
+  function sizePanels() {
+    panelH = circle.offsetHeight;
+    panels.forEach(p => { p.style.height = panelH + 'px'; });
+  }
+  sizePanels();
+  window.addEventListener('resize', sizePanels);
+
+  // scroll to HOME on load
+  window.scrollTo(0, window.innerHeight);
+
+  // nav data-nav values: 0=בית 1=מוזיקה 2=הופעות 3=אודות 4=יצירת קשר
+  // track:              [0=clone-music, 1=home, 2=contact, 3=perf, 4=about, 5=music, 6=clone-home]
+  const navToTrack = { 0: 1, 1: 5, 2: 3, 3: 4, 4: 2 };
+  // track index → nav data-nav
+  const trackToNav = [1, 0, 4, 2, 3, 1, 0];
+
+  function updateNav(pos) {
+    const idx = Math.round(Math.max(0, Math.min(6, pos)));
+    const active = trackToNav[idx];
+    navBtns.forEach(a => a.classList.toggle('active', Number(a.dataset.nav) === active));
+  }
+
+  // ── infinite loop: teleport on scroll event ──────────────────────
+  let busy = false;
+  window.addEventListener('scroll', () => {
+    if (busy) return;
+    const sy = window.scrollY;
+    const vh = window.innerHeight;
+    // Scrolling UP past clone-contact → jump to real CONTACT
+    if (sy < vh * 0.5) {
+      busy = true;
+      rendered += 5;
+      window.scrollTo(0, sy + 5 * vh);
+      requestAnimationFrame(() => { busy = false; });
+    }
+    // Scrolling DOWN past clone-home → jump to real HOME
+    // max scrollY = 6*vh, so trigger at 5.5*vh
+    else if (sy > vh * 5.5) {
+      busy = true;
+      rendered -= 5;
+      window.scrollTo(0, sy - 5 * vh);
+      requestAnimationFrame(() => { busy = false; });
+    }
+  }, { passive: true });
+
+  // ── animation loop ────────────────────────────────────────────────
+  function loop() {
+    const target = window.scrollY / window.innerHeight;
+    rendered += (target - rendered) * 0.1;
+    track.style.transform = `translateY(${-rendered * panelH}px)`;
+    updateNav(rendered);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // ── nav pill click ────────────────────────────────────────────────
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const trackIdx = navToTrack[Number(btn.dataset.nav)];
+      window.scrollTo({ top: trackIdx * window.innerHeight, behavior: 'smooth' });
+    });
+  });
+
+  // ── data-goto (האזן button) ───────────────────────────────────────
+  track.addEventListener('click', e => {
+    const btn = e.target.closest('[data-goto]');
+    if (!btn) return;
+    const trackIdx = navToTrack[Number(btn.dataset.goto)];
+    window.scrollTo({ top: trackIdx * window.innerHeight, behavior: 'smooth' });
+  });
+
+  // ── audio player ─────────────────────────────────────────────────
+  const audio     = new Audio();
+  const audioBar  = document.getElementById('audioBar');
+  const audioTitle = document.getElementById('audioTitle');
+  const audioProgress = document.getElementById('audioProgress');
+  const audioProgressWrap = document.getElementById('audioProgressWrap');
+  const audioTime = document.getElementById('audioTime');
+  let activeBtn   = null;
+
+  function fmt(s) {
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return m + ':' + String(sec).padStart(2, '0');
+  }
+
+  track.addEventListener('click', e => {
+    const btn = e.target.closest('.play-btn');
+    if (!btn) return;
+    const src = btn.dataset.src;
+
+    if (activeBtn === btn && !audio.paused) {
+      audio.pause();
+      btn.querySelector('.play-icon').textContent = '▶';
+      return;
+    }
+    // stop previous
+    if (activeBtn && activeBtn !== btn) {
+      activeBtn.querySelector('.play-icon').textContent = '▶';
+    }
+    activeBtn = btn;
+    if (audio.src !== location.origin + src) {
+      audio.src = src;
+      audioTitle.textContent = btn.closest('.panel-track-item').querySelector('.panel-track-name').textContent;
+    }
+    audio.play();
+    btn.querySelector('.play-icon').textContent = '⏸';
+    audioBar.style.display = 'flex';
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    audioProgress.style.width = pct + '%';
+    audioTime.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+  });
+
+  audio.addEventListener('ended', () => {
+    if (activeBtn) activeBtn.querySelector('.play-icon').textContent = '▶';
+    audioProgress.style.width = '0';
+  });
+
+  audioProgressWrap.addEventListener('click', e => {
+    const rect = audioProgressWrap.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  });
+
+  // ── contact form AJAX ─────────────────────────────────────────────
+  const form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const res  = await fetch('/', { method: 'POST', body: data });
+      if (res.ok) {
+        form.innerHTML = '<p class="panel-success">ההודעה נשלחה! אחזור אליך בהקדם ✓</p>';
+      }
+    });
+  }
+})();
+</script>
+{% endblock %}

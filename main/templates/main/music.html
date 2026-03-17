@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+{% block title %}מוזיקה — אריה פולק{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+  {% include 'main/_topbar.html' %}
+
+  <div class="page-hero">
+    <div class="page-eyebrow">MUSIC</div>
+    <h1 class="page-title">מוזיקה</h1>
+  </div>
+
+  <div class="page-content">
+    {% if tracks %}
+      <div class="tracks-list">
+        {% for track in tracks %}
+          <div class="track-item">
+            <div class="track-num">{{ forloop.counter }}</div>
+            <div class="track-info">
+              <div class="track-title">{{ track.title }}</div>
+              <div class="track-year">{{ track.year }}</div>
+              {% if track.description %}
+                <div class="track-desc">{{ track.description }}</div>
+              {% endif %}
+            </div>
+            {% if track.audio_url %}
+              <a href="{{ track.audio_url }}" class="nav-pill" target="_blank" rel="noopener">האזן</a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span>♩</span>
+        יצירות יתווספו בקרוב
+      </div>
+    {% endif %}
+  </div>
+
+  <footer class="site-footer">© 2025 אריה פולק. כל הזכויות שמורות.</footer>
+</div>
+{% endblock %}

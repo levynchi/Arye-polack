@@ -1,0 +1,10 @@
+<header class="topbar">
+  <a href="/" class="topbar-logo">אריה פולק</a>
+  <nav class="topbar-nav" aria-label="ניווט ראשי">
+    <a href="/" class="nav-pill {% if request.resolver_match.url_name == 'home' %}active{% endif %}">בית</a>
+    <a href="/music/" class="nav-pill {% if request.resolver_match.url_name == 'music' %}active{% endif %}">מוזיקה</a>
+    <a href="/performances/" class="nav-pill {% if request.resolver_match.url_name == 'performances' %}active{% endif %}">הופעות</a>
+    <a href="/about/" class="nav-pill {% if request.resolver_match.url_name == 'about' %}active{% endif %}">אודות</a>
+    <a href="/contact/" class="nav-pill {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">יצירת קשר</a>
+  </nav>
+</header>
